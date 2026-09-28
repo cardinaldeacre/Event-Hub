@@ -51,7 +51,6 @@ class BookingService
     }
     public function generateTicketCode(): string
     {
-        // Generate a unique ticket code (you can customize this logic)
         return strtoupper(uniqid('TICKET_'));
     }
 }
