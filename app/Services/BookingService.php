@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Jobs\ProcessTicketMail;
 use App\Models\Booking;
 use App\Models\EventSlot;
 use App\Models\Ticket;
@@ -40,13 +41,15 @@ class BookingService
 
             $ticketCode = $this->generateTicketCode();
 
-            Ticket::create([
+            $ticket = Ticket::create([
                 'booking_id' => $booking->id,
                 'ticket_code' => $ticketCode,
                 'is_used' => false,
             ]);
 
-            return $booking;
+            ProcessTicketMail::dispatch($ticket);
+
+            return $booking->load(['slot.event', 'user', 'ticket']);
         });
     }
     public function generateTicketCode(): string
