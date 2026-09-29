@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Ticket;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class TicketController extends Controller
 {
@@ -18,7 +19,11 @@ class TicketController extends Controller
     public function verify(Request $request)
     {
         $request->validate([
-            'ticket_code' => 'required|uuid|exists:tickets.ticket_code'
+            'ticket_code' => [
+                'required',
+                'uuid',
+                Rule::exists('tickets', 'ticket_code')
+            ]
         ]);
 
         $ticket = Ticket::where('ticket_code', $request->ticket_code)->first();

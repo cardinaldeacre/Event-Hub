@@ -13,7 +13,7 @@ class BookingController extends Controller
             $booking = $bookingService->createBooking($request->user(), $request->validated('event_slot_id'));
             return redirect()->route('tickets.show', $booking->ticket->id)->with('success', 'Booking created successfully. Your ticket code is: ' . $booking->ticket->ticket_code);
         } catch (\Exception $e) {
-            return back()->with('error', $e->getMessage());
+            return back()->withErrors(['booking_error' => $e->getMessage()]);
         }
     }
 }
